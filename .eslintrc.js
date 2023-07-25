@@ -32,17 +32,17 @@ module.exports = {
       { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' },
     ],
   },
-  // overrides: [
-  //   {
-  //     files: ['tests/**/*', '**/__tests__/**/*', '**/*.{spec,test}.*'],
-  //     env: {
-  //       'jest/globals': true,
-  //     },
-  //     plugins: ['jest', 'jest-dom', 'testing-library'],
-  //     extends: ['plugin:jest/recommended', 'plugin:jest-dom/recommended', 'plugin:testing-library/react'],
-  //     rules: {
-  //       'jest/expect-expect': 'off',
-  //     },
-  //   },
-  // ],
+  overrides: [
+    {
+      files: ['tests/**/*', '**/__tests__/**/*', '**/*.{spec,test}.*'],
+      env: {
+        'jest/globals': true,
+      },
+      plugins: ['jest', 'jest-dom', 'testing-library'],
+      extends: ['plugin:jest/recommended', 'plugin:jest-dom/recommended', 'plugin:testing-library/react'],
+      rules: {
+        'jest/expect-expect': 'off',
+      },
+    },
+  ],
 };

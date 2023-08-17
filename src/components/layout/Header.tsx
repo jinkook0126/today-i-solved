@@ -1,4 +1,5 @@
-import { Flex, Text, Button } from '@chakra-ui/react';
+import { Flex, Button } from '@chakra-ui/react';
+import Logo from './logo';
 
 const Header = () => (
   <Flex
@@ -10,10 +11,10 @@ const Header = () => (
     alignItems='center'
     justifyContent='space-between'
   >
-    <Text as='b' fontSize='3xl'>
-      Today I Solved
-    </Text>
-    <Button colorScheme='teal'>로그아웃</Button>
+    <Logo width={220} />
+    <Button colorScheme='teal' variant='ghost'>
+      로그아웃
+    </Button>
   </Flex>
 );
 

@@ -1,15 +1,16 @@
-import Head from 'next/head';
-import { Box } from '@chakra-ui/react';
-import Header from '@/components/layout/Header';
+import { NextPage } from 'next';
+import NextLink from 'next/link';
+import ServiceLayout from '@/components/layout/service_layout';
+import { Link } from '@chakra-ui/react';
 
-const Home = () => (
-  <Box minH='100vh' backgroundColor='gray.50'>
-    <Head>
-      <title>TIS</title>
-      <link rel='icon' href='/favicon.ico' />
-    </Head>
-    <Header />
-  </Box>
-);
+const IndexPage: NextPage = () => {
+  return (
+    <ServiceLayout>
+      <Link as={NextLink} href='/tmp'>
+        Temp 페이지 잠~~깐만 이동
+      </Link>
+    </ServiceLayout>
+  );
+};
 
-export default Home;
+export default IndexPage;

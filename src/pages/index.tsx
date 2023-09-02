@@ -20,15 +20,64 @@ const IndexPage: NextPage<IndexProps> = props => {
         </Text>
       </Center>
       <Box w={{ base: 'calc(100% - 2rem)', '2xl': '1728px', xl: '1376px', lg: '1024px' }} marginX='auto'>
-        <Flex wrap={'wrap'}>
+        <Flex mt={'2rem'}>
+          <Box flexBasis={'0%'} flexGrow={1} flexShrink={1}>
+            <Flex wrap={'wrap'} m={'-1rem'}>
+              {posts.map(post => {
+                return (
+                  <Flex
+                    _hover={{
+                      transform: 'translateY(-8px)',
+                      boxShadow: 'tis_hover',
+                    }}
+                    transitionDelay={'0s, 0s'}
+                    transitionTimingFunction={'ease-in, ease-in'}
+                    transitionProperty={'box-shadow, transform'}
+                    transitionDuration={'0.25s, 0.25s'}
+                    cursor={'pointer'}
+                    boxShadow={'tis'}
+                    key={post.id}
+                    m={'1rem'}
+                    borderRadius={4}
+                    bg={'white'}
+                    h={377}
+                    w={'20rem'}
+                  >
+                    <Text w={'100%'} fontWeight={300}>
+                      {post.title}
+                    </Text>
+                  </Flex>
+                );
+              })}
+            </Flex>
+          </Box>
+        </Flex>
+        {/* <Flex wrap={'wrap'} grow={1} basis={'0%'} shrink={1}>
           {posts.map(post => {
             return (
-              <Box boxShadow={'tis'} key={post.id} m={'16px'} borderRadius={4} bg={'white'} h={377} flex={1}>
+              <Box
+                _hover={{
+                  transform: 'translateY(-8px)',
+                  boxShadow: 'tis_hover',
+                }}
+                transitionDelay={'0s, 0s'}
+                transitionTimingFunction={'ease-in, ease-in'}
+                transitionProperty={'box-shadow, transform'}
+                transitionDuration={'0.25s, 0.25s'}
+                cursor={'pointer'}
+                boxShadow={'tis'}
+                key={post.id}
+                m={'16px'}
+                borderRadius={4}
+                bg={'white'}
+                h={377}
+                w={'20rem'}
+              >
                 <Text fontWeight={300}>{post.title}</Text>
               </Box>
             );
           })}
-        </Flex>
+        </Flex> */}
       </Box>
     </ServiceLayout>
   );

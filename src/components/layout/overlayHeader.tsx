@@ -11,7 +11,7 @@ const OverlayHeader = () => {
     if (headerRef.current) {
       init = true;
       pos = -200;
-      headerRef.current.style.marginTop = String(`-200px`);
+      headerRef.current.style.marginTop = String(`${pos}px`);
       headerRef.current.style.opacity = String(0);
     }
   };
@@ -21,30 +21,30 @@ const OverlayHeader = () => {
     }
     let currrentScroll = window.scrollY;
     if (currrentScroll <= 0) {
+      prevScroll = currrentScroll;
       initPosition();
-    } else {
-      if (prevScroll > currrentScroll) {
-        if (currrentScroll > 200) {
-          init = false;
-        }
-        if (init === false) {
-          if (currrentScroll <= 20) {
-            initPosition();
-          } else {
-            pos = Math.min(Math.max(-200, pos) + Math.abs(currrentScroll - prevScroll), 0);
-            headerRef.current.style.marginTop = String(`${pos}px`);
-            headerRef.current.style.opacity = '';
-          }
-        }
-      } else {
-        if (init === false) {
-          pos += -(currrentScroll - prevScroll);
+      return;
+    }
+    if (prevScroll > currrentScroll) {
+      if (currrentScroll > 200) {
+        init = false;
+      }
+      if (init === false) {
+        if (currrentScroll <= 20) {
+          initPosition();
+        } else {
+          pos = Math.min(Math.max(-200, pos) + Math.abs(currrentScroll - prevScroll), 0);
           headerRef.current.style.marginTop = String(`${pos}px`);
           headerRef.current.style.opacity = '';
         }
       }
+    } else {
+      if (init === false) {
+        pos += -(currrentScroll - prevScroll);
+        headerRef.current.style.marginTop = String(`${pos}px`);
+        headerRef.current.style.opacity = '';
+      }
     }
-
     prevScroll = currrentScroll;
   };
   useEffect(() => {

@@ -1,16 +1,17 @@
 import { useEffect, useRef } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Flex, Button } from '@chakra-ui/react';
+import Logo from './logo';
 
 const OverlayHeader = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   let prevScroll = 0;
-  let pos = -200;
+  let pos = -64;
   let init = true;
 
   const initPosition = () => {
     if (headerRef.current) {
       init = true;
-      pos = -200;
+      pos = -64;
       headerRef.current.style.marginTop = String(`${pos}px`);
       headerRef.current.style.opacity = String(0);
     }
@@ -26,14 +27,14 @@ const OverlayHeader = () => {
       return;
     }
     if (prevScroll > currrentScroll) {
-      if (currrentScroll > 200) {
+      if (currrentScroll > 64) {
         init = false;
       }
       if (init === false) {
-        if (currrentScroll <= 20) {
+        if (currrentScroll <= 64) {
           initPosition();
         } else {
-          pos = Math.min(Math.max(-200, pos) + Math.abs(currrentScroll - prevScroll), 0);
+          pos = Math.min(Math.max(-64, pos) + Math.abs(currrentScroll - prevScroll), 0);
           headerRef.current.style.marginTop = String(`${pos}px`);
           headerRef.current.style.opacity = '';
         }
@@ -56,16 +57,29 @@ const OverlayHeader = () => {
   return (
     <Box
       ref={headerRef}
-      bg={'green'}
+      bg={'white'}
       w={'100%'}
       pos='fixed'
       zIndex={10}
       boxShadow='rgba(0, 0, 0, 0.08) 0px 0px 8px'
-      h='200px'
+      h='4rem'
       top='0'
-      mt='-200px'
+      mt='-64px'
     >
-      <Text>This is Overlay Header !! </Text>
+      <Flex
+        bg={'white'}
+        h={'100%'}
+        w={{ base: 'calc(100% - 2rem)', '2xl': '1728px', xl: '1376px', lg: '1024px' }}
+        marginX='auto'
+        direction='row'
+        alignItems='center'
+        justifyContent='space-between'
+      >
+        <Logo width={220} />
+        <Button colorScheme='teal' variant='ghost'>
+          로그인
+        </Button>
+      </Flex>
     </Box>
   );
 };

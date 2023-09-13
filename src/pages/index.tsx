@@ -21,9 +21,9 @@ const IndexPage: NextPage<IndexProps> = props => {
         <Flex mt={'2rem'}>
           <Box flexBasis={'0%'} flexGrow={1} flexShrink={1}>
             <Flex wrap={'wrap'} m={'-1rem'}>
-              {posts.map(post => {
-                return <Card post={post} />;
-              })}
+              {posts.map(post => (
+                <Card key={post.id} post={post} />
+              ))}
             </Flex>
           </Box>
         </Flex>

@@ -22,8 +22,29 @@ const Write: NextPage<PageProps> = () => {
   // }, []);
   return (
     <WriteLayout>
-      <Box w={{ base: 'calc(100% - 2rem)', '2xl': '1728px', xl: '1376px', lg: '1024px' }} h='100vh' marginX='auto'>
-        <Input variant='unstyled' placeholder='제목을 입력하세요' h='66px' fontSize={'2.75rem'} fontWeight={'700'} />
+      <Box
+        w={{ base: 'calc(100% - 2rem)', '2xl': '1728px', xl: '1376px', lg: '1024px' }}
+        bg={'white'}
+        h='100vh'
+        marginX='auto'
+      >
+        <Box paddingTop={{ sm: '1rem', md: '2rem' }} paddingX={{ sm: '16px', md: '3rem' }}>
+          <Input
+            variant='unstyled'
+            placeholder='제목을 입력하세요'
+            h={{ sm: '43px', md: '66px' }}
+            fontSize={{ sm: '1.8rem', md: '2.75rem' }}
+            fontWeight={'700'}
+          />
+          <Box
+            mt={{ sm: '1rem', md: '1.5rem' }}
+            mb={{ sm: '0.66rem', md: '1rem' }}
+            w='4rem'
+            h='6px'
+            borderRadius='1px'
+            backgroundColor='gray.400'
+          />
+        </Box>
       </Box>
       <Box>{/* <div ref={editorRef}></div> */}</Box>
     </WriteLayout>

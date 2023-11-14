@@ -1,15 +1,28 @@
 import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
-import Editor from '@toast-ui/editor';
-import { useRef, useEffect, useState, useCallback } from 'react';
-import WriteLayout from '@/components/layout/write_layout';
-import { Box, Input } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { Rating } from 'react-simple-star-rating';
+import Editor from '@toast-ui/editor';
+import { Box, Input, Flex } from '@chakra-ui/react';
 import TagInput from '@/components/write/tagInput';
+import WriteLayout from '@/components/layout/write_layout';
 interface PageProps {}
+
+const Divider = () => (
+  <Box
+    mt={{ sm: '1rem', md: '1.5rem' }}
+    mb={{ sm: '0.66rem', md: '1rem' }}
+    w='6rem'
+    h='6px'
+    borderRadius='1px'
+    backgroundColor='gray.400'
+  />
+);
 
 const Write: NextPage<PageProps> = () => {
   const editorRef = useRef<HTMLDivElement>(null);
   const [tags, setTags] = useState<string[]>([]);
+  const [rating, setRating] = useState(0);
   // useEffect(() => {
   //   if (editorRef.current !== null) {
   //     const editor = new Editor({
@@ -27,6 +40,14 @@ const Write: NextPage<PageProps> = () => {
     setTags(tag);
   };
 
+  const handleRating = (rate: number) => {
+    setRating(rate);
+  };
+
+  const onPointerEnter = () => console.log('Enter');
+  const onPointerLeave = () => console.log('Leave');
+  const onPointerMove = (value: number, index: number) => console.log(value, index);
+
   return (
     <WriteLayout>
       <Box
@@ -43,15 +64,21 @@ const Write: NextPage<PageProps> = () => {
             fontSize={{ sm: '1.8rem', md: '2.75rem' }}
             fontWeight={'700'}
           />
-          <Box
-            mt={{ sm: '1rem', md: '1.5rem' }}
-            mb={{ sm: '0.66rem', md: '1rem' }}
-            w='4rem'
-            h='6px'
-            borderRadius='1px'
-            backgroundColor='gray.400'
-          />
+          <Divider />
           <TagInput initialTags={tags} onChange={onTagChange} />
+          <Divider />
+          <Flex direction='row'>
+            <Rating
+              emptyStyle={{ display: 'flex' }}
+              fillStyle={{ display: '-webkit-inline-flex' }}
+              transition
+              initialValue={rating}
+              onClick={handleRating}
+              onPointerEnter={onPointerEnter}
+              onPointerLeave={onPointerLeave}
+              onPointerMove={onPointerMove}
+            />
+          </Flex>
         </Box>
       </Box>
       <Box>{/* <div ref={editorRef}></div> */}</Box>

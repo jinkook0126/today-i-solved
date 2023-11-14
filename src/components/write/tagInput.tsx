@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Input, Tag, Flex, keyframes } from '@chakra-ui/react';
+import { Input, Tag, Flex, keyframes, useToast, Text, Tooltip } from '@chakra-ui/react';
 interface TagInputProps {
   initialTags: string[];
   onChange: (tags: string[]) => void;
@@ -10,6 +10,8 @@ const tagAnimation = keyframes`
   to { transform: scale3d(1, 1, 1); opacitiy: 1; }
 `;
 const TagInput = ({ initialTags, onChange }: TagInputProps) => {
+  const toast = useToast();
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [tags, setTags] = useState<string[]>(initialTags);
   const [value, setValue] = useState('');
   const animation = `0.125s ease-in-out 0s 1 normal forwards running ${tagAnimation}`;
@@ -34,16 +36,25 @@ const TagInput = ({ initialTags, onChange }: TagInputProps) => {
       }
       if (['Enter', ','].includes(e.key)) {
         e.preventDefault();
+        if (value.length > 25) {
+          toast({
+            description: '태그는 25자 미만으로 입력할 수 있습니다.',
+            status: 'error',
+            duration: 4000,
+            isClosable: true,
+          });
+          return;
+        }
         const split = value.split('#');
         const tmp: string[] = [];
         split.forEach(v => {
-          if (v !== '' && !tags.includes(v.trim())) {
-            tmp.push(v.trim());
+          const trimValue = v.trim();
+          if (trimValue !== '' && !tags.includes(trimValue)) {
+            tmp.push(trimValue);
           }
         });
         setTags(prev => [...prev, ...tmp]);
         setValue('');
-        return;
       }
     },
     [value],
@@ -54,40 +65,53 @@ const TagInput = ({ initialTags, onChange }: TagInputProps) => {
   };
 
   return (
-    <Flex flexWrap='wrap'>
-      {tags.map((tag, i) => (
-        <Tag
-          h={{ sm: '1.5rem', md: '2rem' }}
-          fontSize={{ sm: '0.75rem', md: '1rem' }}
-          borderRadius={{ sm: '0.75rem', md: '1rem' }}
-          paddingX={{ sm: '0.75rem', md: '1rem' }}
-          mr={{ sm: '0.5rem', md: '0.75rem' }}
-          mb={{ sm: '0.5rem', md: '0.75rem' }}
-          color={'teal'}
-          bg='gray.100'
-          cursor='pointer'
-          onClick={() => onTagClick(tag)}
-          animation={animation}
-          key={String(i)}
-          transition='ease-in 0.125s'
-        >
-          {tag}
-        </Tag>
-      ))}
-      <Input
-        display='inline-flex'
-        variant='unstyled'
-        placeholder='태그를 입력하세요'
-        padding='1px'
-        w='14rem'
-        h={{ sm: '2rem', md: '2.125rem' }}
-        fontSize={{ sm: '0.75rem', md: '1.125rem' }}
-        lineHeight={{ sm: '1.5rem', md: '2rem' }}
-        onKeyDown={onKeyDown}
-        onChange={onChangeInput}
-        value={value}
-      />
-    </Flex>
+    <Tooltip
+      isOpen={isTooltipOpen}
+      placement='bottom-start'
+      label={
+        <Text fontSize={'0.75rem'}>
+          쉼표 혹은 엔터를 입력하여 태그를 등록할 수 있습니다. <br />
+          등록된 태그를 클릭하면 삭제됩니다.
+        </Text>
+      }
+    >
+      <Flex flexWrap='wrap'>
+        {tags.map((tag, i) => (
+          <Tag
+            h={{ sm: '1.5rem', md: '2rem' }}
+            fontSize={{ sm: '0.75rem', md: '1rem' }}
+            borderRadius={{ sm: '0.75rem', md: '1rem' }}
+            paddingX={{ sm: '0.75rem', md: '1rem' }}
+            mr={{ sm: '0.5rem', md: '0.75rem' }}
+            mb={{ sm: '0.5rem', md: '0.75rem' }}
+            color={'teal'}
+            bg='gray.100'
+            cursor='pointer'
+            onClick={() => onTagClick(tag)}
+            animation={animation}
+            key={String(i)}
+            transition='ease-in 0.125s'
+          >
+            {tag}
+          </Tag>
+        ))}
+        <Input
+          display='inline-flex'
+          variant='unstyled'
+          placeholder='태그를 입력하세요'
+          padding='1px'
+          w='14rem'
+          h={{ sm: '2rem', md: '2.125rem' }}
+          fontSize={{ sm: '0.75rem', md: '1.125rem' }}
+          lineHeight={{ sm: '1.5rem', md: '2rem' }}
+          onKeyDown={onKeyDown}
+          onChange={onChangeInput}
+          value={value}
+          onFocus={() => setIsTooltipOpen(true)}
+          onBlur={() => setIsTooltipOpen(false)}
+        />
+      </Flex>
+    </Tooltip>
   );
 };
 

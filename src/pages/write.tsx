@@ -1,11 +1,11 @@
 import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
 import { NextPage } from 'next';
-import { useRef, useEffect, useState, useCallback } from 'react';
-import { Rating } from 'react-simple-star-rating';
+import { useRef, useEffect, useState } from 'react';
 import Editor from '@toast-ui/editor';
-import { Box, Input, Flex } from '@chakra-ui/react';
+import { Box, Input } from '@chakra-ui/react';
 import TagInput from '@/components/write/tagInput';
 import WriteLayout from '@/components/layout/write_layout';
+import LevelRating from '@/components/write/levelRating';
 interface PageProps {}
 
 const Divider = () => (
@@ -22,7 +22,7 @@ const Divider = () => (
 const Write: NextPage<PageProps> = () => {
   const editorRef = useRef<HTMLDivElement>(null);
   const [tags, setTags] = useState<string[]>([]);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(3);
   // useEffect(() => {
   //   if (editorRef.current !== null) {
   //     const editor = new Editor({
@@ -40,13 +40,13 @@ const Write: NextPage<PageProps> = () => {
     setTags(tag);
   };
 
-  const handleRating = (rate: number) => {
+  const onRatingChange = (rate: number) => {
     setRating(rate);
   };
 
-  const onPointerEnter = () => console.log('Enter');
-  const onPointerLeave = () => console.log('Leave');
-  const onPointerMove = (value: number, index: number) => console.log(value, index);
+  useEffect(() => {
+    console.log(rating, tags);
+  }, [rating, tags]);
 
   return (
     <WriteLayout>
@@ -67,18 +67,7 @@ const Write: NextPage<PageProps> = () => {
           <Divider />
           <TagInput initialTags={tags} onChange={onTagChange} />
           <Divider />
-          <Flex direction='row'>
-            <Rating
-              emptyStyle={{ display: 'flex' }}
-              fillStyle={{ display: '-webkit-inline-flex' }}
-              transition
-              initialValue={rating}
-              onClick={handleRating}
-              onPointerEnter={onPointerEnter}
-              onPointerLeave={onPointerLeave}
-              onPointerMove={onPointerMove}
-            />
-          </Flex>
+          <LevelRating initialRating={rating} onChange={onRatingChange} />
         </Box>
       </Box>
       <Box>{/* <div ref={editorRef}></div> */}</Box>

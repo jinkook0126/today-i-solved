@@ -22,7 +22,7 @@ const Divider = () => (
 const Write: NextPage<PageProps> = () => {
   const editorRef = useRef<HTMLDivElement>(null);
   const [tags, setTags] = useState<string[]>([]);
-  const [rating, setRating] = useState(3);
+  const [rating, setRating] = useState(0);
   // useEffect(() => {
   //   if (editorRef.current !== null) {
   //     const editor = new Editor({

@@ -1,13 +1,16 @@
-import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
 import { NextPage } from 'next';
 import { useRef, useEffect, useState } from 'react';
-import Editor from '@toast-ui/editor';
 import { Box, Input } from '@chakra-ui/react';
 import TagInput from '@/components/write/tagInput';
 import WriteLayout from '@/components/layout/write_layout';
 import LevelRating from '@/components/write/levelRating';
+// import ToastEditor from '@/components/write/toastEditor';
+import dynamic from 'next/dynamic';
 interface PageProps {}
 
+const NoSsrEditor = dynamic(() => import('@/components/write/toastEditor'), {
+  ssr: false,
+});
 const Divider = () => (
   <Box
     mt={{ sm: '1rem', md: '1.5rem' }}
@@ -20,21 +23,9 @@ const Divider = () => (
 );
 
 const Write: NextPage<PageProps> = () => {
-  const editorRef = useRef<HTMLDivElement>(null);
+  // const editorRef = useRef<Editor>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
-  // useEffect(() => {
-  //   if (editorRef.current !== null) {
-  //     const editor = new Editor({
-  //       el: editorRef.current,
-  //       height: '500px',
-  //       initialEditType: 'markdown',
-  //       previewStyle: 'vertical',
-  //     });
-
-  //     editor.getMarkdown();
-  //   }
-  // }, []);
 
   const onTagChange = (tag: string[]) => {
     setTags(tag);
@@ -42,6 +33,10 @@ const Write: NextPage<PageProps> = () => {
 
   const onRatingChange = (rate: number) => {
     setRating(rate);
+  };
+
+  const onEditorChange = (value: string) => {
+    console.log(value);
   };
 
   useEffect(() => {
@@ -68,9 +63,9 @@ const Write: NextPage<PageProps> = () => {
           <TagInput initialTags={tags} onChange={onTagChange} />
           <Divider />
           <LevelRating initialRating={rating} onChange={onRatingChange} />
+          <NoSsrEditor initContents='hello' onChange={onEditorChange} />
         </Box>
       </Box>
-      <Box>{/* <div ref={editorRef}></div> */}</Box>
     </WriteLayout>
   );
 };

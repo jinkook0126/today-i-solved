@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
-import { useRef, useEffect, useState } from 'react';
-import { Box, Input } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { Box, Input, Flex, Button } from '@chakra-ui/react';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import TagInput from '@/components/write/tagInput';
 import WriteLayout from '@/components/layout/write_layout';
 import LevelRating from '@/components/write/levelRating';
-// import ToastEditor from '@/components/write/toastEditor';
 import dynamic from 'next/dynamic';
 interface PageProps {}
 
@@ -23,7 +23,6 @@ const Divider = () => (
 );
 
 const Write: NextPage<PageProps> = () => {
-  // const editorRef = useRef<Editor>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
 
@@ -47,24 +46,43 @@ const Write: NextPage<PageProps> = () => {
     <WriteLayout>
       <Box
         w={{ base: 'calc(100% - 2rem)', '2xl': '1728px', xl: '1376px', lg: '1024px' }}
-        bg={'white'}
+        bg='white'
         h='100vh'
         marginX='auto'
       >
-        <Box paddingTop={{ sm: '1rem', md: '2rem' }} paddingX={{ sm: '16px', md: '3rem' }}>
+        <Flex paddingY={{ sm: '1rem', md: '2rem' }} paddingX={{ sm: '16px', md: '3rem' }} h='100%' direction='column'>
           <Input
             variant='unstyled'
             placeholder='제목을 입력하세요'
             h={{ sm: '43px', md: '66px' }}
             fontSize={{ sm: '1.8rem', md: '2.75rem' }}
-            fontWeight={'700'}
+            fontWeight='700'
           />
           <Divider />
           <TagInput initialTags={tags} onChange={onTagChange} />
           <Divider />
           <LevelRating initialRating={rating} onChange={onRatingChange} />
-          <NoSsrEditor initContents='hello' onChange={onEditorChange} />
-        </Box>
+          <Flex direction='column' justify='space-between' h='100%' mt={{ sm: '1rem', md: '1.5rem' }}>
+            <Flex flex={1}>
+              <Box width='100%'>
+                <NoSsrEditor initContents='' onChange={onEditorChange} />
+              </Box>
+            </Flex>
+            <Flex h='4rem' direction='row' justifyContent='space-between' alignItems='center'>
+              <Button leftIcon={<ArrowBackIcon />} variant='ghost' fontWeight={400} fontSize='1.125rem'>
+                나가기
+              </Button>
+              <Flex gap='0.75rem'>
+                <Button colorScheme='teal' variant='ghost' fontSize='1.125rem'>
+                  임시저장
+                </Button>
+                <Button colorScheme='teal' variant='solid' fontSize='1.125rem'>
+                  발행하기
+                </Button>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
       </Box>
     </WriteLayout>
   );

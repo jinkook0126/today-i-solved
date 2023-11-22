@@ -15,11 +15,10 @@ const ToastEditor = ({ initContents = '', onChange }: Props) => {
   const editorRef = useRef<Editor>(null);
   const toolbarItems = [
     ['heading', 'bold', 'italic', 'strike'],
-    ['hr'],
+    ['hr', 'quote'],
     ['ul', 'ol', 'task'],
-    ['table', 'link'],
-    ['image'],
-    ['code'],
+    ['image', 'link'],
+    ['code', 'codeblock'],
     ['scrollSync'],
   ];
 
@@ -29,20 +28,23 @@ const ToastEditor = ({ initContents = '', onChange }: Props) => {
   };
 
   return (
-    <Editor
-      ref={editorRef}
-      initialValue={initContents || ' '} // 글 수정 시 사용
-      onChange={handleChnage}
-      initialEditType='markdown' // wysiwyg & markdown
-      previewStyle={window.innerWidth > 1000 ? 'vertical' : 'tab'} // tab, vertical
-      hideModeSwitch={true}
-      height='calc(100% - 10rem)'
-      theme={''} // '' & 'dark'
-      usageStatistics={false}
-      toolbarItems={toolbarItems}
-      useCommandShortcut={true}
-      plugins={[colorSyntax]}
-    />
+    <Box mt={{ sm: '1rem', md: '1.5rem' }}>
+      <Editor
+        ref={editorRef}
+        initialValue={initContents || ' '} // 글 수정 시 사용
+        onChange={handleChnage}
+        initialEditType='markdown' // wysiwyg & markdown
+        previewStyle={window.innerWidth > 1000 ? 'vertical' : 'tab'} // tab, vertical
+        hideModeSwitch={true}
+        height='auto'
+        theme={''} // '' & 'dark'
+        usageStatistics={false}
+        toolbarItems={toolbarItems}
+        useCommandShortcut={true}
+        plugins={[colorSyntax]}
+      />
+    </Box>
+
     // <Box>
     //   {editorRef && (
     //     <Editor

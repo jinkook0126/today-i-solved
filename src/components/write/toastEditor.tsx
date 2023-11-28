@@ -4,6 +4,7 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import { useRef } from 'react';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { Editor } from '@toast-ui/react-editor';
+import { useMediaQuery } from '@chakra-ui/react';
 
 interface Props {
   initContents: string;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const ToastEditor = ({ initContents = '', onChange }: Props) => {
+  const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
   const editorRef = useRef<Editor>(null);
   const toolbarItems = [
     ['heading', 'bold', 'italic', 'strike'],
@@ -32,7 +34,7 @@ const ToastEditor = ({ initContents = '', onChange }: Props) => {
       initialValue={initContents || ' '} // 글 수정 시 사용
       onChange={handleChnage}
       initialEditType='markdown' // wysiwyg & markdown
-      previewStyle={window.innerWidth > 1000 ? 'vertical' : 'tab'} // tab, vertical
+      previewStyle={isLargerThan1000 ? 'vertical' : 'tab'} // tab, vertical
       hideModeSwitch={true}
       height='100%'
       theme={''} // '' & 'dark'

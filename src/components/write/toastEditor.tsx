@@ -1,6 +1,11 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
-import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+import 'tui-color-picker/dist/tui-color-picker.css';
+import 'prismjs/themes/prism.css';
+
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+import Prism from 'prismjs';
 import { useRef } from 'react';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { Editor } from '@toast-ui/react-editor';
@@ -31,17 +36,17 @@ const ToastEditor = ({ initContents = '', onChange }: Props) => {
   return (
     <Editor
       ref={editorRef}
-      initialValue={initContents || ' '} // 글 수정 시 사용
+      initialValue={initContents || ' '}
       onChange={handleChnage}
-      initialEditType='markdown' // wysiwyg & markdown
-      previewStyle={isLargerThan1000 ? 'vertical' : 'tab'} // tab, vertical
+      initialEditType='markdown'
+      previewStyle={isLargerThan1000 ? 'vertical' : 'tab'}
       hideModeSwitch={true}
       height='100%'
-      theme={''} // '' & 'dark'
+      theme={''}
       usageStatistics={false}
       toolbarItems={toolbarItems}
       useCommandShortcut={true}
-      plugins={[colorSyntax]}
+      plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
       placeholder='문제에 대한 설명과 풀이를 적어주세요!'
     />
   );

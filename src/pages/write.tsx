@@ -1,11 +1,12 @@
 import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
-import { Box, Input, Flex, Button } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import { useEffect, useState, useCallback } from 'react';
+import { Box, Input, Flex, useToast } from '@chakra-ui/react';
 import TagInput from '@/components/write/tagInput';
 import WriteLayout from '@/components/layout/write_layout';
 import LevelRating from '@/components/write/levelRating';
 import dynamic from 'next/dynamic';
+import WriteFooterButton from '@/components/write/writeFooterButton';
+import { useRouter } from 'next/router';
 interface PageProps {}
 
 const NoSsrEditor = dynamic(() => import('@/components/write/toastEditor'), {
@@ -23,8 +24,12 @@ const Divider = () => (
 );
 
 const Write: NextPage<PageProps> = () => {
+  const router = useRouter();
+  const toast = useToast();
   const [tags, setTags] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
+  const [title, setTitle] = useState('');
+  const [contents, setContents] = useState('');
 
   const onTagChange = (tag: string[]) => {
     setTags(tag);
@@ -35,8 +40,37 @@ const Write: NextPage<PageProps> = () => {
   };
 
   const onEditorChange = (value: string) => {
-    console.log(value);
+    setContents(value);
   };
+
+  const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const isInvalidInput = useCallback(() => {
+    let msg = '';
+    if (title === '') msg = '제목이 비어있습니다.';
+    else if (contents === '') msg = '내용이 비어있습니다.';
+    else if (rating === 0) msg = '난이도를 선택해주세요.';
+
+    if (msg !== '') {
+      toast({
+        description: msg,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        variant: 'subtle',
+      });
+      return true;
+    }
+    return false;
+  }, [title, rating, contents]);
+
+  const onGoBack = () => router.back();
+  const onTempSave = () => {
+    if (isInvalidInput()) return;
+  };
+  const onSave = () => {};
 
   useEffect(() => {
     console.log(rating, tags);
@@ -57,6 +91,8 @@ const Write: NextPage<PageProps> = () => {
             h={{ sm: '43px', md: '66px' }}
             fontSize={{ sm: '1.8rem', md: '2.75rem' }}
             fontWeight='700'
+            onChange={onChangeTitle}
+            value={title}
           />
           <Divider />
           <TagInput initialTags={tags} onChange={onTagChange} />
@@ -65,22 +101,10 @@ const Write: NextPage<PageProps> = () => {
           <Flex direction='column' justify='space-between' h='100%' mt={{ sm: '1rem', md: '1.5rem' }}>
             <Flex flex={1}>
               <Box width='100%'>
-                <NoSsrEditor initContents='' onChange={onEditorChange} />
+                <NoSsrEditor initContents={contents} onChange={onEditorChange} />
               </Box>
             </Flex>
-            <Flex h='4rem' direction='row' justifyContent='space-between' alignItems='center'>
-              <Button leftIcon={<ArrowBackIcon />} variant='ghost' fontWeight={400} fontSize='1.125rem'>
-                나가기
-              </Button>
-              <Flex gap='0.75rem'>
-                <Button colorScheme='teal' variant='ghost' fontSize='1.125rem'>
-                  임시저장
-                </Button>
-                <Button colorScheme='teal' variant='solid' fontSize='1.125rem'>
-                  발행하기
-                </Button>
-              </Flex>
-            </Flex>
+            <WriteFooterButton onGoBack={onGoBack} onSave={onSave} onTempSave={onTempSave} />
           </Flex>
         </Flex>
       </Box>

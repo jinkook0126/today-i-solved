@@ -6,7 +6,7 @@ import 'prismjs/themes/prism.css';
 
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 import Prism from 'prismjs';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { Editor } from '@toast-ui/react-editor';
 import { useMediaQuery } from '@chakra-ui/react';
@@ -16,7 +16,7 @@ interface Props {
   onChange: (content: string) => void;
 }
 
-const ToastEditor = ({ initContents = '', onChange }: Props) => {
+const ToastEditor = ({ initContents, onChange }: Props) => {
   const [isLargerThan1000] = useMediaQuery('(min-width: 1000px)');
   const editorRef = useRef<Editor>(null);
   const toolbarItems = [
@@ -36,7 +36,7 @@ const ToastEditor = ({ initContents = '', onChange }: Props) => {
   return (
     <Editor
       ref={editorRef}
-      initialValue={initContents || ' '}
+      initialValue={initContents}
       onChange={handleChnage}
       initialEditType='markdown'
       previewStyle={isLargerThan1000 ? 'vertical' : 'tab'}

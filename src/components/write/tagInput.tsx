@@ -40,8 +40,9 @@ const TagInput = ({ initialTags, onChange }: TagInputProps) => {
           toast({
             description: '태그는 25자 미만으로 입력할 수 있습니다.',
             status: 'error',
-            duration: 4000,
+            duration: 3000,
             isClosable: true,
+            variant: 'subtle',
           });
           return;
         }

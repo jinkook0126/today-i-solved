@@ -36,18 +36,16 @@ const ToastEditor = ({ initContents, onChange }: Props) => {
   return (
     <Editor
       ref={editorRef}
-      initialValue={initContents}
+      initialValue={initContents || '문제에 대한 설명과 풀이를 적어주세요!'}
       onChange={handleChnage}
       initialEditType='markdown'
       previewStyle={isLargerThan1000 ? 'vertical' : 'tab'}
       hideModeSwitch={true}
       height='100%'
-      theme={''}
       usageStatistics={false}
       toolbarItems={toolbarItems}
       useCommandShortcut={true}
       plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
-      placeholder='문제에 대한 설명과 풀이를 적어주세요!'
     />
   );
 };

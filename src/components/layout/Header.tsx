@@ -1,9 +1,11 @@
-import { Flex, Button } from '@chakra-ui/react';
+import { Flex, Button, useDisclosure } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import Logo from './logo';
+import LoginModal from '../login/loginModal';
 
 const Header = () => {
   const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Flex
@@ -19,10 +21,11 @@ const Header = () => {
         <Button colorScheme='teal' variant='outline' onClick={() => router.push('/write')}>
           새 글 작성
         </Button>
-        <Button colorScheme='teal' variant='ghost'>
+        <Button colorScheme='teal' variant='ghost' onClick={onOpen}>
           로그인
         </Button>
       </Flex>
+      <LoginModal isOpen={isOpen} onClose={onClose} />
     </Flex>
   );
 };

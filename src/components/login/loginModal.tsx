@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Flex,
   Modal,
@@ -33,7 +33,8 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [isRequest, setIsRequest] = useState(false);
   const label = isLogin ? '로그인' : '회원가입';
-  const { register, handleSubmit } = useForm<FormData>();
+  const { register, handleSubmit, reset } = useForm<FormData>();
+
   const onSubmit: SubmitHandler<FormData> = ({ email }) => {
     const regExp = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
     if (email === '' || !regExp.test(email)) {
@@ -47,26 +48,41 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       return;
     }
     if (isLogin) {
-      alert('do Login');
+      alert(`do Login with ${email}`);
       return;
     }
-    alert('do SignUp');
+    alert(`do SignUp with ${email}`);
     setIsRequest(true);
   };
+
+  useEffect(() => {
+    return () => {
+      reset();
+      setIsLogin(true);
+      setIsRequest(false);
+    };
+  }, [isOpen]);
   return (
-    <Modal closeOnOverlayClick={false} isCentered motionPreset='slideInBottom' isOpen={isOpen} onClose={onClose}>
+    <Modal
+      size={{ base: 'full', md: 'md' }}
+      closeOnOverlayClick={false}
+      isCentered
+      motionPreset='scale'
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <ModalOverlay />
-      <ModalContent w={390} h={530} p={'1.5rem'}>
+      <ModalContent p='1.5rem' minH='530px'>
         <Flex justifyContent='flex-end' mb='2.25rem'>
           <IconButton
             onClick={onClose}
-            size={'xs'}
+            size='xs'
             variant='unstyled'
             aria-label='Close'
-            icon={<CloseIcon color={'gray.500'} />}
+            icon={<CloseIcon color='gray.500' />}
           />
         </Flex>
-        <Flex direction='column' justifyContent={'space-between'} flexGrow={1}>
+        <Flex direction='column' justifyContent='space-between' flexGrow={1}>
           <Box>
             <Text as='h2' fontSize='1.3125rem' fontWeight='bold'>
               {label}
@@ -80,7 +96,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
                   h='3rem'
                   borderWidth='1px'
                   borderColor={'teal.200'}
-                  bg='green.100'
+                  bg='teal.100'
                   px='0.75rem'
                   alignItems='center'
                 >
@@ -171,7 +187,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
             </Box>
           </Box>
           <Flex direction='row' justifyContent='flex-end'>
-            <Text fontSize='xs' mr='0.25rem'>
+            <Text fontSize='sm' mr='0.25rem'>
               {isLogin ? '아직 회원이 아니신가요?' : '계정이 이미 있으신가요?'}
             </Text>
             <Box
@@ -180,7 +196,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
               cursor='pointer'
               color='teal.500'
               fontWeight='bold'
-              fontSize='xs'
+              fontSize='sm'
             >
               회원가입
             </Box>

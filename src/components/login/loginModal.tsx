@@ -11,8 +11,10 @@ import {
   Button,
   useToast,
   Link,
+  Icon,
 } from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
+import { CloseIcon, CheckIcon } from '@chakra-ui/icons';
+
 import { SubmitHandler, useForm } from 'react-hook-form';
 import GithubSvg from '/public/assets/login/github.svg';
 import GoogleSvg from '/public/assets/login/google.svg';
@@ -29,6 +31,7 @@ interface FormData {
 const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const toast = useToast();
   const [isLogin, setIsLogin] = useState(true);
+  const [isRequest, setIsRequest] = useState(false);
   const label = isLogin ? '로그인' : '회원가입';
   const { register, handleSubmit } = useForm<FormData>();
   const onSubmit: SubmitHandler<FormData> = ({ email }) => {
@@ -43,7 +46,12 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
       });
       return;
     }
-    alert('do Login');
+    if (isLogin) {
+      alert('do Login');
+      return;
+    }
+    alert('do SignUp');
+    setIsRequest(true);
   };
   return (
     <Modal closeOnOverlayClick={false} isCentered motionPreset='slideInBottom' isOpen={isOpen} onClose={onClose}>
@@ -67,34 +75,50 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
               <Text as='h4' fontSize='sm' marginY='1rem' fontWeight='bold' color='gray.500'>
                 이메일로 {label}
               </Text>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Flex h={'3rem'}>
-                  <Input
-                    {...register('email')}
-                    placeholder='이메일을 입력하세요'
-                    borderRadius='0'
-                    borderTopLeftRadius='2px'
-                    borderBottomLeftRadius='2px'
-                    fontSize='1rem'
-                    borderTopWidth='1px'
-                    borderLeftWidth='1px'
-                    borderBottomWidth='1px'
-                    p='16px'
-                  />
-                  <Button
-                    type='submit'
-                    size='md'
-                    width='102px'
-                    fontSize='14px'
-                    borderRadius='0'
-                    colorScheme='teal'
-                    borderTopRightRadius='2px'
-                    borderBottomRightRadius='2px'
-                  >
-                    {label}
-                  </Button>
+              {isRequest ? (
+                <Flex
+                  h='3rem'
+                  borderWidth='1px'
+                  borderColor={'teal.200'}
+                  bg='green.100'
+                  px='0.75rem'
+                  alignItems='center'
+                >
+                  <Icon as={CheckIcon} w='16px' h='16px' color='green.600' />
+                  <Text as='h4' fontSize='0.875rem' flex={1} color='green.600' textAlign='center'>
+                    회원가입 링크가 이메일로 전송되었습니다.
+                  </Text>
                 </Flex>
-              </form>
+              ) : (
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <Flex h={'3rem'}>
+                    <Input
+                      {...register('email')}
+                      placeholder='이메일을 입력하세요'
+                      borderRadius='0'
+                      borderTopLeftRadius='2px'
+                      borderBottomLeftRadius='2px'
+                      fontSize='1rem'
+                      borderTopWidth='1px'
+                      borderLeftWidth='1px'
+                      borderBottomWidth='1px'
+                      p='16px'
+                    />
+                    <Button
+                      type='submit'
+                      size='md'
+                      width='102px'
+                      fontSize='14px'
+                      borderRadius='0'
+                      colorScheme='teal'
+                      borderTopRightRadius='2px'
+                      borderBottomRightRadius='2px'
+                    >
+                      {label}
+                    </Button>
+                  </Flex>
+                </form>
+              )}
             </Box>
             <Box mt='40px'>
               <Text as='h4' fontSize='sm' marginY='1rem' fontWeight='bold' color='gray.500'>

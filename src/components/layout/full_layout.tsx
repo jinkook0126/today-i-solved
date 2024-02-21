@@ -7,7 +7,7 @@ type Props = {
 
 const WriteLayout = ({ children }: Props) => {
   return (
-    <Box minH='100vh' backgroundColor='gray.50'>
+    <Box minH='100vh'>
       <Head>
         <title>TIS</title>
       </Head>

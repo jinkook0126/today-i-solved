@@ -10,10 +10,16 @@ interface FormData {
   email: string;
   userId: string;
   memo: string;
+  terms: boolean;
 }
 
 const Register: NextPage<PageProps> = () => {
-  const { handleSubmit, register, control } = useForm<FormData>();
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = data => {
     console.log(data);
@@ -62,7 +68,11 @@ const Register: NextPage<PageProps> = () => {
             placeholder='당신을 한 줄로 소개해보세요'
           />
           <Box>
-            <Checkbox colorScheme='teal' size={'lg'}>
+            <Checkbox
+              colorScheme='teal'
+              size={'lg'}
+              {...register('terms', { required: '이용약관과 개인정보취급방침에 동의해주세요.' })}
+            >
               <Text fontSize={'sm'}>
                 <Link color='teal.500' href='#'>
                   이용약관
@@ -74,8 +84,11 @@ const Register: NextPage<PageProps> = () => {
                 에 동의합니다.
               </Text>
             </Checkbox>
+            <Text fontSize={'xs'} color={'red.500'} mt={1}>
+              {errors?.terms?.message}
+            </Text>
           </Box>
-          <Flex mt={90} gap='20px'>
+          <Flex mt={'60px'} gap='20px'>
             <Button size='lg'>취소</Button>
             <Button type='submit' colorScheme='teal' size='lg'>
               가입

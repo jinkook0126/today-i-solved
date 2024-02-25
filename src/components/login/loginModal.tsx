@@ -198,7 +198,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
               fontWeight='bold'
               fontSize='sm'
             >
-              회원가입
+              {isLogin ? '회원가입' : '로그인'}
             </Box>
           </Flex>
         </Flex>

@@ -2,14 +2,17 @@ import { NextPage } from 'next';
 import { Box, Text, Flex, Button, Checkbox, Link } from '@chakra-ui/react';
 import RegisterInput from '@/components/register/registerInput';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { getSocialProfile, SocialProfile } from '@/utils/auth';
+import axiosInstance from '@/utils/axiosInstance';
 interface PageProps {}
 
 interface FormData {
-  name: string;
+  username: string;
   email: string;
   userId: string;
-  memo: string;
+  about: string;
   terms: boolean;
 }
 
@@ -19,10 +22,33 @@ const Register: NextPage<PageProps> = () => {
     register,
     control,
     formState: { errors },
-  } = useForm<FormData>();
+    setValue,
+  } = useForm<FormData>({ defaultValues: { username: '', email: '', userId: '', about: '' } });
+  const { query, push } = useRouter();
+  const onGetSocialProfile = async () => {
+    const profile = await getSocialProfile();
+    setValue('username', profile.name);
+    setValue('email', profile.email);
+  };
+
+  useEffect(() => {
+    if (query.social) {
+      onGetSocialProfile();
+    }
+  }, [query.social]);
 
   const onSubmit: SubmitHandler<FormData> = data => {
-    console.log(data);
+    try {
+      axiosInstance.post('/auth/social/register', {
+        userId: data.userId,
+        username: data.username,
+        about: data.about,
+      });
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+    push('/');
   };
 
   return (
@@ -37,15 +63,15 @@ const Register: NextPage<PageProps> = () => {
         <Flex my='3rem' direction={'column'} gap='30px'>
           <RegisterInput
             label='이름'
-            size={22}
-            name='name'
+            size={14}
+            name='username'
             control={control}
             placeholder='이름을 입력하세요'
             rules={{ required: '사용자 ID를 입력해주세요.' }}
           />
           <RegisterInput
             label='사용자 ID'
-            size={26}
+            size={14}
             name='userId'
             control={control}
             placeholder='새 사용자 ID를 입력하세요'
@@ -53,17 +79,18 @@ const Register: NextPage<PageProps> = () => {
           />
           <RegisterInput
             label='이메일'
-            size={26}
+            size={18}
             name='email'
             control={control}
             type='email'
             placeholder='이메일을 입력하세요'
             rules={{ required: '이메일을 입력해주세요.' }}
+            readOnly
           />
           <RegisterInput
             label='한 줄 소개'
-            size={40}
-            name='memo'
+            size={24}
+            name='about'
             control={control}
             placeholder='당신을 한 줄로 소개해보세요'
           />

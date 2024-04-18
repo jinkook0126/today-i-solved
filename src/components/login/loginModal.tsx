@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   Flex,
   Modal,
@@ -30,6 +31,8 @@ interface FormData {
 
 const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const toast = useToast();
+  const router = useRouter();
+
   const [isLogin, setIsLogin] = useState(true);
   const [isRequest, setIsRequest] = useState(false);
   const label = isLogin ? '로그인' : '회원가입';
@@ -162,7 +165,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
                   <GithubSvg width='20px' height='20px' />
                 </Link>
                 <Link
-                  href='#'
+                  href={`http://localhost:3010/auth/social/redirect/google?next=${router.pathname}`}
                   w='3rem'
                   h='3rem'
                   borderRadius='1.5rem'
@@ -208,3 +211,7 @@ const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
 };
 
 export default LoginModal;
+// https://github.com/login?
+// client_id=7c3902d881910d52ae3e&
+// return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3D7c3902d881910d52ae3e%26integrateState%3D%26isIntegrate%3D0%26redirect_uri%3
+// Dhttps%253A%252F%252Fv2.velog.io%252Fapi%252Fv2%252Fauth%252Fsocial%252Fcallback%252Fgithub%253Fnext%253D%252F%2540kyleryu%252F%25EA%25B0%259C%25EB%25B0%259C%25EC%259E%2590%25EA%25B0%2580-100%25EC%2596%25B5%25EC%259D%2584-%25EB%25B2%2584%25EB%258A%2594-%25EA%25B0%2580%25EC%259E%25A5-%25EB%25B9%25A0%25EB%25A5%25B8-%25EB%25B0%25A9%25EB%25B2%2595%26scope%3Duser%253Aemail

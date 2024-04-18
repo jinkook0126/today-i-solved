@@ -67,6 +67,7 @@ const RegisterInput = <T extends FieldValues>({
         }}
         onFocus={() => setColor('teal.500')}
         onChange={field.onChange}
+        value={field.value}
         {...rest}
       />
       <Text fontSize={'xs'} color={'red.500'} mt={1}>
